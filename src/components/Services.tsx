@@ -1,10 +1,12 @@
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useState } from 'react';
 import mosqueImage from '@/assets/mosque-chandelier.jpg';
 import weddingImage from '@/assets/wedding-chandelier.jpg';
 import homeImage from '@/assets/home-chandelier.jpg';
 
 export const Services = () => {
   const { t } = useLanguage();
+  const [active, setActive] = useState<number | null>(null);
 
   const services = [
     {
@@ -38,6 +40,11 @@ export const Services = () => {
           {services.map((service, index) => (
             <div
               key={index}
+              onMouseEnter={() => setActive(index)}
+              onMouseLeave={() => setActive(null)}
+              onClick={() => setActive(active === index ? null : index)}
+              role="button"
+              aria-expanded={active === index}
               className="relative overflow-hidden rounded-lg border border-border transition-all duration-300 hover:border-primary hover:shadow-luxury bg-background"
             >
               <div className="aspect-square relative overflow-hidden group">
@@ -48,12 +55,12 @@ export const Services = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
               </div>
-              <div className="absolute bottom-0 left-0 right-0 p-6 max-h-[50%] overflow-hidden">
+              <div className={`absolute bottom-0 left-0 right-0 p-6 ${active === index ? 'max-h-none' : 'max-h-[50%]'} overflow-hidden transition-all duration-500`}>
                 <h3 className="font-playfair text-2xl font-semibold mb-2 text-foreground">
                   {service.title}
                 </h3>
                 <div className="relative">
-                  <p className="font-inter text-muted-foreground line-clamp-3 hover:line-clamp-none transition-all duration-500">
+                  <p className={`font-inter text-muted-foreground transition-all duration-500 ${active === index ? '' : 'line-clamp-3'}`}>
                     {service.description}
                   </p>
                 </div>

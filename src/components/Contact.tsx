@@ -4,13 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 
 export const Contact = () => {
@@ -19,28 +12,72 @@ export const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
-    service: '',
     message: '',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // For now, just show a success message
-    // Later can be connected to backend
-    toast({
-      title: language === 'ru' ? 'Спасибо за обращение!' : 'Murojaatingiz uchun rahmat!',
-      description: language === 'ru' 
-        ? 'Мы свяжемся с вами в ближайшее время.' 
-        : 'Tez orada siz bilan bog\'lanamiz.',
-    });
+    // Telegram bot token va chat ID
+    const BOT_TOKEN = '8590366389:AAFikofEZxQ3h4UG7om5aGMJuGA_uRAPc-s';
+    const CHAT_ID = '-1003462058151';
+    
+    // Xabarni tayyorlash
+    const message = `
+📧 <b>Yangi so'rov</b>
 
-    setFormData({
-      name: '',
-      phone: '',
-      service: '',
-      message: '',
-    });
+👤 <b>Ism:</b> ${formData.name}
+📱 <b>Telefon:</b> ${formData.phone}
+💬 <b>Xabar:</b> ${formData.message}
+    `.trim();
+
+    // Telegram API'ga yuborish
+    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: message,
+        parse_mode: 'HTML',
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.ok) {
+          toast({
+            title: language === 'ru' ? 'Спасибо за обращение!' : 'Murojaatingiz uchun rahmat!',
+            description: language === 'ru' 
+              ? 'Мы свяжемся с вами в ближайшее время.' 
+              : 'Tez orada siz bilan bog\'lanamiz.',
+          });
+
+          setFormData({
+            name: '',
+            phone: '',
+            message: '',
+          });
+        } else {
+          toast({
+            title: language === 'ru' ? 'Ошибка' : 'Xatolik',
+            description: language === 'ru' 
+              ? 'Сообщение не удалось отправить. Попробуйте позже.'
+              : 'Xabarni yuborib bo\'lmadi. Keyinroq qayta urinib ko\'ring.',
+            variant: 'destructive',
+          });
+        }
+      })
+      .catch((error) => {
+        console.error('Telegram API xatosi:', error);
+        toast({
+          title: language === 'ru' ? 'Ошибка' : 'Xatolik',
+          description: language === 'ru' 
+            ? 'Сообщение не удалось отправить. Попробуйте позже.'
+            : 'Xabarni yuborib bo\'lmadi. Keyinroq qayta urinib ko\'ring.',
+          variant: 'destructive',
+        });
+      });
   };
 
   return (
@@ -61,6 +98,7 @@ export const Contact = () => {
               </Label>
               <Input
                 id="name"
+                placeholder={language === 'ru' ? 'Введите ваше имя' : 'Ismingizni kiriting'}
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                 required
@@ -75,31 +113,13 @@ export const Contact = () => {
               <Input
                 id="phone"
                 type="tel"
+                placeholder="+99899-445-50-46"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+          
                 required
                 className="mt-2"
               />
-            </div>
-
-            <div>
-              <Label htmlFor="service" className="font-inter">
-                {t.contact.service}
-              </Label>
-              <Select
-                value={formData.service}
-                onValueChange={(value) => setFormData({ ...formData, service: value })}
-              >
-                <SelectTrigger className="mt-2">
-                  <SelectValue placeholder={t.contact.selectService} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="mosque">{t.contact.mosqueLighting}</SelectItem>
-                  <SelectItem value="wedding">{t.contact.weddingLighting}</SelectItem>
-                  <SelectItem value="home">{t.contact.homeLighting}</SelectItem>
-                  <SelectItem value="custom">{t.contact.custom}</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
 
             <div>
@@ -108,6 +128,7 @@ export const Contact = () => {
               </Label>
               <Textarea
                 id="message"
+                placeholder={language === 'ru' ? 'Напишите ваше сообщение...' : 'Xabaringizni yozing...'}
                 value={formData.message}
                 onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                 rows={5}

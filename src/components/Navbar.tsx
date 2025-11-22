@@ -8,6 +8,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import Logo from '@/assets/lampadrio.png'
+
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +27,8 @@ export const Navbar = () => {
     <nav className="fixed top-0 w-full z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          <div className="flex items-center">
+          <div className="flex items-center gap-3">
+            <img src={Logo} alt="Lampadario Logo" className="h-10 w-auto" />
             <span className="text-2xl font-playfair font-bold text-primary">Lampadario</span>
           </div>
 

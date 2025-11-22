@@ -1,6 +1,6 @@
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Send, Instagram } from 'lucide-react';
-
+import Logo from '@/assets/lampadrio.png'
 export const Footer = () => {
   const { t, language } = useLanguage();
 
@@ -16,7 +16,10 @@ export const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           <div>
-            <h3 className="font-playfair text-2xl font-bold text-primary mb-4">Lampadario</h3>
+            <div className="flex items-center gap-3 mb-4">
+              <img src={Logo} alt="Lampadario Logo" className="h-10 w-auto" />
+              <h3 className="font-playfair text-2xl font-bold text-primary">Lampadario</h3>
+            </div>
             <p className="font-inter text-muted-foreground">
               {language === 'ru' 
                 ? 'Роскошные люстры ручной работы для свадеб, мечетей и домов.'

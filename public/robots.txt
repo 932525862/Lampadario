@@ -1,5 +1,5 @@
 User-agent: *
-Allow: /
+Disallow:
 
-Sitemap: https://www.lampadario.uz//sitemap.xml
+Sitemap: https://www.lampadario.uz/sitemap.xml
 Host: https://www.lampadario.uz/

@@ -20,7 +20,7 @@ export const Contact = () => {
     
     // Telegram bot token va chat ID
     const BOT_TOKEN = '8590366389:AAFikofEZxQ3h4UG7om5aGMJuGA_uRAPc-s';
-    const CHAT_ID = '-1003462058151';
+    const CHAT_ID = '-1003476884363';
     
     // Xabarni tayyorlash
     const message = `
